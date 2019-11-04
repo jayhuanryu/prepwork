@@ -42,36 +42,28 @@ class DetailPageActivity : BaseActivity() {
 
         viewModel.postData(item)
 
-//        binding.apply {
-//            this.item = item
-//            this.viewModel = viewModel
-//            this.lifecycleOwner = this@DetailPageActivity
-//            this.listener = EventHandlers(this@DetailPageActivity)
-//            executePendingBindings()
-//        }
-
         binding.viewModel = viewModel
-        binding.item = item
+//        binding.item = item
         binding.listener = EventHandlers(this)
         binding.lifecycleOwner = this
         binding.executePendingBindings()
 
 
-        initView(binding, item)
+        initView(binding)
         addObserver()
         initData(item)
 
     }
 
 
-    private fun initView(binding: ActivityDetailPageBinding, item : MainResultsDataModel) {
+    private fun initView(binding: ActivityDetailPageBinding) {
         // actionBar
         supportActionBar.apply {
             title = "MovieDetail"
         }
 
         // ImageView
-        Picasso.get().load(Consts.BASE_IMAGE_URL+"w185/"+item.poster_path).into(binding.ivPoster)
+//        Picasso.get().load(Consts.BASE_IMAGE_URL+"w185/"+item.poster_path).into(binding.ivPoster)
 
         trailerAdapter = TrailerViewAdapter(this)
         reviewAdapter = ReviewViewAdapter(this)

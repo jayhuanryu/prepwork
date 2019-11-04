@@ -2,9 +2,13 @@ package com.example.moviedb.data_models
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.moviedb.Consts
+import com.squareup.picasso.Picasso
 
 @Entity(tableName = "main_result_table")
 class MainResultsDataModel(
@@ -71,6 +75,15 @@ class MainResultsDataModel(
         override fun newArray(size: Int): Array<MainResultsDataModel?> {
             return arrayOfNulls(size)
         }
+
+        @JvmStatic
+        @BindingAdapter("app:setImageResource")
+        fun setImageResource(imageView: ImageView, poster_path: String?) {
+            Picasso.get().load(Consts.BASE_IMAGE_URL + "w185/" + poster_path).into(imageView)
+//        Picasso.get().load()
+        }
     }
+
+
 
 }

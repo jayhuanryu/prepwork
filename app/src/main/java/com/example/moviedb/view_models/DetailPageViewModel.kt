@@ -102,7 +102,9 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
             )
     }
 
-    fun insert(item: MainResultsDataModel) = viewModelScope.launch {
+    fun insert() = viewModelScope.launch {
+        val item = mainResultDataModel.value!!
+        item.isLiked = !item.isLiked
         repository.insert(item)
     }
 

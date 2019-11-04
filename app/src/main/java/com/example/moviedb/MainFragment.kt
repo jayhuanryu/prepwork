@@ -102,7 +102,7 @@ class MainFragment : Fragment() {
 
        viewModel.favoriteList.observe(this, Observer {
             viewAdapter.updateList(it)
-//                       favoriteList = it
+                       favoriteList = it
         })
 
         viewModel.downloadedList.observe(this, Observer {
@@ -125,8 +125,8 @@ class MainFragment : Fragment() {
         when(item.itemId) {
             R.id.btnSortPopular -> viewModel.getPopularList()
             R.id.btnSortVote -> viewModel.getTopRatedList()
-//            R.id.btnLiked -> viewAdapter.updateList(favoriteList)
-            R.id.btnLiked -> viewModel.getLikedList()
+            R.id.btnLiked -> viewAdapter.updateList(favoriteList)
+//            R.id.btnLiked -> viewModel.getLikedList()
         }
 
         return super.onOptionsItemSelected(item)

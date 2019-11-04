@@ -9,9 +9,6 @@
             type="com.example.moviedb.view_models.DetailPageViewModel" />
 
         <variable
-            name="item"
-            type="com.example.moviedb.data_models.MainResultsDataModel" />
-        <variable
             name="listener"
             type="com.example.moviedb.EventHandlers" />
     </data>
@@ -61,7 +58,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:adjustViewBounds="true" />
+                    android:adjustViewBounds="true"
+                    app:setImageResource = "@{viewModel.mainResultDataModel.poster_path}"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -87,7 +85,7 @@
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
                        android:checked="@{viewModel.mainResultDataModel.liked}"
-                       android:onClick="@{() -> listener.onIsLikedClicked(item, viewModel)}"/>
+                       android:onClick="@{() -> listener.onIsLikedClicked(viewModel)}"/>
 
 
                 </LinearLayout>

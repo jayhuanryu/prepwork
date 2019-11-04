@@ -33,9 +33,8 @@ class EventHandlers(val context: Context)  {
 
 
 
-    fun onIsLikedClicked(item : MainResultsDataModel, viewModel : DetailPageViewModel) {
-        item.isLiked = !item.isLiked
-        viewModel.insert(item)
+    fun onIsLikedClicked(viewModel : DetailPageViewModel) {
+        viewModel.insert()
     }
 
 }
