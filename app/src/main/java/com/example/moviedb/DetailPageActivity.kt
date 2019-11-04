@@ -1,7 +1,6 @@
 package com.example.moviedb
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -13,7 +12,6 @@ import com.example.moviedb.data_models.MainResultsDataModel
 import com.example.moviedb.databinding.ActivityDetailPageBinding
 import com.example.moviedb.view_models.DetailPageViewModel
 import com.example.moviedb.view_models.ViewModelFactory
-import com.squareup.picasso.Picasso
 
 class DetailPageActivity : BaseActivity() {
 
@@ -93,14 +91,9 @@ class DetailPageActivity : BaseActivity() {
             trailerAdapter.updateList(it)
         })
 
-        viewModel.favoriteList.observe(this, Observer {
 
-            for (iter in it) {
-                if (iter.id == item.id ) {
-                    viewModel.postData(iter)
-                }
-            }
-
+        viewModel.searchByLiveData.observe(this, Observer {
+            viewModel.postData(it)
         })
 
 

@@ -13,6 +13,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
+import androidx.lifecycle.LiveData
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import androidx.lifecycle.Transformations
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+
+
+
+
 
 class DetailPageViewModel(private val context: Context) : ViewModel() {
 
@@ -23,9 +31,7 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
     var trailerList: MutableLiveData<List<TrailerResultDataModel>> = MutableLiveData()
 
     var mainResultDataModel : MutableLiveData<MainResultsDataModel> = MutableLiveData()
-
-    var favoriteList: LiveData<List<MainResultsDataModel>>
-
+    val searchByLiveData: LiveData<MainResultsDataModel>
 
     private var repository : MainResultRepository
     private val dbServices by lazy { MovieDBServicesInterface.create() }
@@ -34,7 +40,7 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
     init {
         val mainResultDao = MainResultRoomDatabase.getDatabase(context).mainResultDao()
         repository = MainResultRepository(mainResultDao)
-        favoriteList = repository.getLikedList()
+        searchByLiveData = Transformations.switchMap (mainResultDataModel) { selectedItem -> repository.getItem(selectedItem.id) }
     }
 
     fun getReviewData(movieId : Int) {

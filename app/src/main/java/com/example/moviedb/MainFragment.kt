@@ -49,7 +49,7 @@ class MainFragment : Fragment() {
         binding = DataBindingUtil.setContentView(activity as Activity, R.layout.fragment_main)
 
         initView()
-        if (savedInstanceState == null || !savedInstanceState?.getBoolean("is")) {
+        if (savedInstanceState == null || !savedInstanceState.getBoolean("is")) {
             viewModel.getPopularList()
         }
 
@@ -74,15 +74,6 @@ class MainFragment : Fragment() {
     fun newInstance(): MainFragment {
         return MainFragment()
 
-    }
-
-
-    fun updateView(id: Int) {
-        when (id) {
-            R.id.btnSortPopular -> viewModel.getPopularList()
-            R.id.btnSortVote -> viewModel.getTopRatedList()
-            R.id.btnLiked -> viewModel.getLikedList()
-        }
     }
 
     override fun onAttach(context: Context) {
