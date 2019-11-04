@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MovieDB</string>
+
+    <string name="main_page_title">Pop Movies</string>
+    <string name="detail_page_title">Movie Detail</string>
+
+    <string name="trailer_with_number">Trailer %d</string>
+    <string name="trailer_no_value">Trailer is not added</string>
+</resources>

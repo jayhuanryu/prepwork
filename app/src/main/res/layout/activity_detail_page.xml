@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.moviedb.view_models.DetailPageViewModel" />
+
+        <variable
+            name="item"
+            type="com.example.moviedb.data_models.MainResultsDataModel" />
+        <variable
+            name="listener"
+            type="com.example.moviedb.EventHandlers" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".DetailPageActivity">
+
+
+            <LinearLayout
+                android:id="@+id/llTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="@{viewModel.mainResultDataModel.title}"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="40sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintTop_toBottomOf="@id/llTitle">
+
+                <ImageView
+                    android:id="@+id/ivPoster"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvReleaseDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorBlack"
+                        android:text="@{viewModel.mainResultDataModel.release_date}"/>
+
+                    <TextView
+                        android:id="@+id/tvRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{Float.toString(viewModel.mainResultDataModel.vote_average)}"/>
+
+                   <CheckBox
+                       android:id="@+id/cbIsLiked"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:checked="@{viewModel.mainResultDataModel.liked}"
+                       android:onClick="@{() -> listener.onIsLikedClicked(item, viewModel)}"/>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvOverview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.mainResultDataModel.overview}"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llSummary" />
+
+            <View
+                android:id="@+id/lineDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorBlack"
+                app:layout_constraintTop_toBottomOf="@id/tvOverview" />
+
+
+            <TextView
+                android:id="@+id/tvTrailerText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Trailers : "
+                android:textColor="@color/colorBlack"
+                app:layout_constraintTop_toBottomOf="@id/lineDivider" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTrailers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvTrailerText" />
+
+
+            <TextView
+                android:id="@+id/tvReviewText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reviews"
+                android:textColor="@color/colorBlack"
+                app:layout_constraintTop_toBottomOf="@+id/rvTrailers" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvReviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvReviewText" />
+
+
+<!--            <ProgressBar-->
+<!--                android:id="@+id/progress_circular"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent" />-->
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
