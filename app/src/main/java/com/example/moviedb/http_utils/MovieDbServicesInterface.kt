@@ -2,6 +2,7 @@ package com.example.moviedb.http_utils
 
 import com.example.moviedb.Consts
 import com.example.moviedb.data_models.MainDataModel
+import com.example.moviedb.data_models.MainResultsDataModel
 import com.example.moviedb.data_models.ReviewDataModel
 import com.example.moviedb.data_models.TrailerDataModel
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -37,5 +38,8 @@ interface MovieDBServicesInterface {
 
     @GET("movie/{id}/videos")
     fun getVideos(@Path("id") id : Int, @Query("api_key")key : String) : Observable<TrailerDataModel>
+
+    @GET("movie/{id}")
+    fun getDetail(@Path("id")id : Int, @Query("api_key") key : String) : Observable<MainResultsDataModel>
 
 }

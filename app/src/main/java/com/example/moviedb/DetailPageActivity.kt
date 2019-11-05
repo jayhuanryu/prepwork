@@ -93,7 +93,9 @@ class DetailPageActivity : BaseActivity() {
 
 
         viewModel.searchByLiveData.observe(this, Observer {
-            viewModel.postData(it)
+            if (it != null) {
+                viewModel.postData(it)
+            }
         })
 
 
@@ -102,6 +104,7 @@ class DetailPageActivity : BaseActivity() {
     private fun initData(item : MainResultsDataModel) {
         viewModel.getReviewData(item.id)
         viewModel.getTrailerData(item.id)
+        viewModel.getDetailData(item.id)
     }
 
 

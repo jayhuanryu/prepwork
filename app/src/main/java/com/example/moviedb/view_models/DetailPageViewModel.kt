@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.moviedb.BuildConfig
-import com.example.moviedb.Consts
 import com.example.moviedb.data_models.MainResultsDataModel
 import com.example.moviedb.http_utils.MovieDBServicesInterface
 import com.example.moviedb.data_models.ReviewResultDataModel
@@ -14,12 +13,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import androidx.lifecycle.LiveData
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.lifecycle.Transformations
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
-
 
 
 class DetailPageViewModel(private val context: Context) : ViewModel() {
@@ -108,6 +102,21 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
             )
     }
 
+    fun getDetailData(movieId: Int) {
+        dbServices.getDetail(movieId, BuildConfig.ApiKey)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onNext = {
+                    val item = mainResultDataModel.value
+                    item?.runtime = it.runtime
+                    mainResultDataModel.postValue(item)
+                },
+                onComplete = {},
+                onError = {}
+            )
+    }
+
     fun insert() = viewModelScope.launch {
         val item = mainResultDataModel.value!!
         item.isLiked = !item.isLiked
@@ -118,6 +127,8 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
         mainResultDataModel.value = item
 
     }
+
+
 
 
 }
