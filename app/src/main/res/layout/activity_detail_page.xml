@@ -78,14 +78,24 @@
                         android:id="@+id/tvRating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{Float.toString(viewModel.mainResultDataModel.vote_average)}"/>
+                        app:setRatingText="@{viewModel.mainResultDataModel.vote_average}"/>
+
+                    <!-- android:text="@{Float.toString(viewModel.mainResultDataModel.vote_average)}" -->
 
                    <CheckBox
                        android:id="@+id/cbIsLiked"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
+                       android:button="@drawable/selector_detailview_checkbox"
                        android:checked="@{viewModel.mainResultDataModel.liked}"
                        android:onClick="@{() -> listener.onIsLikedClicked(viewModel)}"/>
+
+                    <TextView
+                        android:id="@+id/tvRunTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:setRunTimeText="@{viewModel.mainResultDataModel.runtime}" />
+
 
 
                 </LinearLayout>

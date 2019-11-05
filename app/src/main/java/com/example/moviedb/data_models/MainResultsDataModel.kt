@@ -3,6 +3,7 @@ package com.example.moviedb.data_models
 import android.os.Parcel
 import android.os.Parcelable
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -21,12 +22,13 @@ class MainResultsDataModel(
     val backdrop_path: Boolean?,
     val original_language: String?,
     val original_title: String?,
-//    val genre_ids : List<Int>?,
+    //    val genre_ids : List<Int>?,
     @ColumnInfo(name = "title") val title: String?,
     val vote_average: Float,
     val overview: String?,
     val release_date: String?,
-    var isLiked : Boolean
+    var isLiked : Boolean,
+    var runtime : Int
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readFloat(),
@@ -42,7 +44,8 @@ class MainResultsDataModel(
         parcel.readFloat(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readByte() != 0.toByte()
+        parcel.readByte() != 0.toByte(),
+        parcel.readInt()
     ) {
     }
 
@@ -61,6 +64,7 @@ class MainResultsDataModel(
         parcel.writeString(overview)
         parcel.writeString(release_date)
         parcel.writeByte(if (isLiked) 1 else 0)
+        parcel.writeInt(runtime)
     }
 
     override fun describeContents(): Int {
@@ -81,6 +85,18 @@ class MainResultsDataModel(
         fun setImageResource(imageView: ImageView, poster_path: String?) {
             Picasso.get().load(Consts.BASE_IMAGE_URL + "w185/" + poster_path).into(imageView)
 //        Picasso.get().load()
+        }
+
+        @JvmStatic
+        @BindingAdapter("app:setRatingText")
+        fun setRatingText(textView: TextView, rating : Float) {
+            textView.text = String.format("%s / 10.0", rating.toString())
+        }
+
+        @JvmStatic
+        @BindingAdapter("app:setRunTimeText")
+        fun setRunTimeText(textView: TextView, runtime: Int) {
+            textView.text = String.format("%d Mins", runtime)
         }
     }
 
