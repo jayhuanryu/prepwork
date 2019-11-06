@@ -2,9 +2,12 @@ package com.example.moviedb
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -28,16 +31,14 @@ class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewAdapter: MovieViewAdapter
 
-    private lateinit var mContext : Context
+    private lateinit var mContext: Context
 
-    private var favoriteList : List<MainResultsDataModel> = mutableListOf()
+    private var favoriteList: List<MainResultsDataModel> = mutableListOf()
 
-    private val   viewModel: MainPageViewModel by lazy {
-        ViewModelProviders.of(this@MainFragment,viewModelFactory)[MainPageViewModel::class.java]
+    private val viewModel: MainPageViewModel by lazy {
+        ViewModelProviders.of(this@MainFragment, viewModelFactory)[MainPageViewModel::class.java]
     }
     private lateinit var viewModelFactory: ViewModelFactory
-
-
 
 
     override fun onCreateView(
@@ -49,11 +50,8 @@ class MainFragment : Fragment() {
         binding = DataBindingUtil.setContentView(activity as Activity, R.layout.fragment_main)
 
         initView()
-        if (savedInstanceState == null || !savedInstanceState.getBoolean("is")) {
-            viewModel.getPopularList()
-        }
-
         setHasOptionsMenu(true)
+        addObserver()
 
         return view
     }
@@ -64,16 +62,29 @@ class MainFragment : Fragment() {
         viewAdapter = MovieViewAdapter(activity as Activity)
 
         binding.recyclerView.apply {
-            layoutManager = GridLayoutManager(activity, 2)
+            layoutManager = GridLayoutManager(activity, getOrientation())
             adapter = viewAdapter
         }
 
 
+
+    }
+
+    private fun getOrientation() : Int{
+        return if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+            2
+        else
+            4
     }
 
     fun newInstance(): MainFragment {
         return MainFragment()
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean("isRestoring", true)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onAttach(context: Context) {
@@ -84,28 +95,34 @@ class MainFragment : Fragment() {
         viewModelFactory = ViewModelFactory(mContext)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-    }
+    private fun addObserver() {
 
-      override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-       viewModel.favoriteList.observe(this, Observer {
-            viewAdapter.updateList(it)
-                       favoriteList = it
-        })
 
         viewModel.downloadedList.observe(this, Observer {
-            viewAdapter.updateList(it)
+            if (it != null) {
+                if (it.isEmpty()) {
+                    Toast.makeText(mContext, "List is empty", Toast.LENGTH_SHORT).show()
+                }
+                viewAdapter.updateList(it)
+            }
+            else {
+                Toast.makeText(mContext, "List is empty", Toast.LENGTH_SHORT).show()
+                viewAdapter.updateList(mutableListOf())
+            }
 
         })
+
+        viewModel.favoriteList.observe(this, Observer {
+            viewModel.getLikedList()
+        })
+
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         Log.d(TAG, "[onCreateOptionsMenu] >> IN")
         inflater.inflate(R.menu.main_menu, menu)
-            super.onCreateOptionsMenu(menu, inflater)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
 
@@ -113,16 +130,21 @@ class MainFragment : Fragment() {
     fun onOptionsItemSelected(item: MenuItem): Boolean {
         Log.d(TAG, "[onOptionsItemSelected] >> IN")
 
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.btnSortPopular -> viewModel.getPopularList()
             R.id.btnSortVote -> viewModel.getTopRatedList()
-            R.id.btnLiked -> viewAdapter.updateList(favoriteList)
-//            R.id.btnLiked -> viewModel.getLikedList()
+            R.id.btnLiked -> {
+//                if (favoriteList.isEmpty()) {
+//                    Toast.makeText(mContext, "No List Saved", Toast.LENGTH_SHORT).show()
+//                }
+//                viewAdapter.updateList(favoriteList)
+                viewModel.getLikedList()
+            }
+
         }
 
         return super.onOptionsItemSelected(item)
     }
-
 
 
 }

@@ -6,7 +6,7 @@ import android.os.Parcelable
 data class ReviewDataModel(
     val page : Int?,
     val id : Int?,
-    val result : List<ReviewResultDataModel>
+    val results : List<ReviewResultDataModel>
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readValue(Int::class.java.classLoader) as? Int,

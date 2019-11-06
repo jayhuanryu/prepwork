@@ -31,7 +31,6 @@ class MainPageViewModel(context: Context) : ViewModel() {
         repository = MainResultRepository(mainResultDao)
 
         favoriteList = repository.getLikedList()
-
         getPopularList()
 
     }
@@ -54,18 +53,14 @@ class MainPageViewModel(context: Context) : ViewModel() {
                 },
                 onError = {
                     Log.e(TAG, it.message)
-                    deleteAll()
-//                    activity.dismissProgressBar()
-//                    activity.showErrorPopup()
                 }
             )
     }
 
-    private fun deleteAll() = viewModelScope.launch {
-        repository.deleteAll()
-    }
 
-      fun getTopRatedList() {
+
+
+    fun getTopRatedList() {
         getData("top_rated")
     }
 
@@ -74,8 +69,10 @@ class MainPageViewModel(context: Context) : ViewModel() {
     }
 
     fun getLikedList() {
-        favoriteList = repository.getLikedList()
+        downloadedList.postValue(favoriteList.value)
     }
+
+
 
 }
 

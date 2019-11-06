@@ -31,7 +31,6 @@ class DetailPageActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail_page)
-//        val item = intent.getParcelableExtra<MainResultsDataModel>("item")
 
 
         viewModelFactory = ViewModelFactory(application)
@@ -40,11 +39,14 @@ class DetailPageActivity : BaseActivity() {
 
         viewModel.postData(item)
 
-        binding.viewModel = viewModel
-//        binding.item = item
-        binding.listener = EventHandlers(this)
-        binding.lifecycleOwner = this
-        binding.executePendingBindings()
+        binding.let {
+            binding.viewModel = viewModel
+            binding.listener = EventHandlers(this)
+            binding.lifecycleOwner = this
+            binding.executePendingBindings()
+
+        }
+
 
 
         initView(binding)

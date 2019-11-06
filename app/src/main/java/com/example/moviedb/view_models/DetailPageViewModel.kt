@@ -25,6 +25,7 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
     var trailerList: MutableLiveData<List<TrailerResultDataModel>> = MutableLiveData()
 
     var mainResultDataModel : MutableLiveData<MainResultsDataModel> = MutableLiveData()
+
     val searchByLiveData: LiveData<MainResultsDataModel>
 
     private var repository : MainResultRepository
@@ -35,6 +36,7 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
         val mainResultDao = MainResultRoomDatabase.getDatabase(context).mainResultDao()
         repository = MainResultRepository(mainResultDao)
         searchByLiveData = Transformations.switchMap (mainResultDataModel) { selectedItem -> repository.getItem(selectedItem.id) }
+
     }
 
     fun getReviewData(movieId : Int) {
@@ -45,9 +47,9 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
             .subscribeBy(
                 onNext = {
                     Log.d(TAG, "[getReviewData] >> onNext")
-                    if (!it.result.isNullOrEmpty()) {
+                    if (!it.results.isNullOrEmpty()) {
                         Log.d(TAG, "[getReviewData] >> onNext : result is empty")
-                        reviewList.value = it.result
+                        reviewList.value = it.results
                     }
                     else {
                         Log.d(TAG, "[getReviewData] >> onNext : result is empty")
@@ -82,7 +84,7 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
                         trailerList.value = it.results
                     }
                     else {
-                        Log.d(TAG, "[getReviewData] >> onNext : result is empty")
+                        Log.d(TAG, "[getTrailerData] >> onNext : result is empty")
                         val temporaryTrailerItem = TrailerResultDataModel("","", "","","","",0, "")
                         val temporaryTrailerList = ArrayList<TrailerResultDataModel>()
                         temporaryTrailerList.add(temporaryTrailerItem)

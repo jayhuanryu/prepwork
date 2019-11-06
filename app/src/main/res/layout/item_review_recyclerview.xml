@@ -15,7 +15,9 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:onClick="@{() -> listener.onClickReview(reviewDataResultModel)">
+        android:onClick="@{() -> listener.onClickReview(reviewDataResultModel)}">
+
+        
 
         <TextView
             android:id="@+id/tvAuthor"
@@ -28,7 +30,21 @@
             android:id="@+id/tvContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{reviewDataResultModel.content}"/>
+            android:text="@{reviewDataResultModel.content}"
+            android:maxLines="5"
+            android:ellipsize="end"/>
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorBlack" />
+
+
+
+
 
     </LinearLayout>
 </layout>
