@@ -97,6 +97,9 @@ class MainFragment : Fragment() {
 
     private fun addObserver() {
 
+        viewModel.favoriteList.observe(this, Observer {
+            viewModel.getLikedList()
+        })
 
         viewModel.downloadedList.observe(this, Observer {
             if (it != null) {
@@ -112,9 +115,7 @@ class MainFragment : Fragment() {
 
         })
 
-        viewModel.favoriteList.observe(this, Observer {
-            viewModel.getLikedList()
-        })
+
 
     }
 
