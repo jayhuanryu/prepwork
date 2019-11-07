@@ -38,7 +38,6 @@ class MovieViewAdapter(private val activity: Activity) : RecyclerView.Adapter<Mo
     inner class ViewHolder(private val binding: ItemMainRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: MainResultsDataModel) {
-            Picasso.get().load(Consts.BASE_IMAGE_URL + "w185/" + item.poster_path).into(binding.imgMovieImage)
             binding.movieResultModel = item
 
         }

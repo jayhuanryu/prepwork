@@ -8,6 +8,10 @@ import com.example.moviedb.data_models.MainResultsDataModel
 @Dao
 public interface MainResultDao {
 
+    @Query("SELECT * FROM main_result_table")
+    fun getAllList() : LiveData<List<MainResultsDataModel>>
+
+
     @Query("SELECT * FROM main_result_table WHERE isLiked")
     fun getFavoriteList() : LiveData<List<MainResultsDataModel>>
 

@@ -38,7 +38,7 @@
             android:layout_marginVertical="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
-            android:text="@string/trailer_no_value"
+            android:text="@{trailerDataModel.name}"
             android:textColor="@color/colorBlack"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"

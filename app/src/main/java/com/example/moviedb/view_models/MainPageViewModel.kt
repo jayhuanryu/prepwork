@@ -29,8 +29,8 @@ class MainPageViewModel(context: Context) : ViewModel() {
         val mainResultDao = MainResultRoomDatabase.getDatabase(context).mainResultDao()
 
         repository = MainResultRepository(mainResultDao)
-
         favoriteList = repository.getLikedList()
+
         getPopularList()
 
     }
@@ -45,7 +45,9 @@ class MainPageViewModel(context: Context) : ViewModel() {
             .subscribeBy(
                 onNext = {
                     Log.d(TAG, "[onNext >> ] " + it.results.size)
-                    downloadedList.postValue(it.results)
+                    if (downloadedList.value != it.results) {
+                        downloadedList.postValue(it.results)
+                    }
                 },
                 onComplete = {
                     Log.d(TAG, "[onCompleted]")

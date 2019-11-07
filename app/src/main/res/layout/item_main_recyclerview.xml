@@ -22,7 +22,8 @@
             android:id="@+id/imgMovieImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            app:setImageResource="@{movieResultModel.poster_path}"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

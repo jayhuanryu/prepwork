@@ -33,8 +33,6 @@ class MainFragment : Fragment() {
 
     private lateinit var mContext: Context
 
-    private var favoriteList: List<MainResultsDataModel> = mutableListOf()
-
     private val viewModel: MainPageViewModel by lazy {
         ViewModelProviders.of(this@MainFragment, viewModelFactory)[MainPageViewModel::class.java]
     }
@@ -98,7 +96,10 @@ class MainFragment : Fragment() {
     private fun addObserver() {
 
         viewModel.favoriteList.observe(this, Observer {
-            viewModel.getLikedList()
+            if (it == null || it.isEmpty()) {
+                Toast.makeText(mContext, "List is empty", Toast.LENGTH_SHORT).show()
+            }
+            viewAdapter.updateList(it)
         })
 
         viewModel.downloadedList.observe(this, Observer {
@@ -134,14 +135,7 @@ class MainFragment : Fragment() {
         when (item.itemId) {
             R.id.btnSortPopular -> viewModel.getPopularList()
             R.id.btnSortVote -> viewModel.getTopRatedList()
-            R.id.btnLiked -> {
-//                if (favoriteList.isEmpty()) {
-//                    Toast.makeText(mContext, "No List Saved", Toast.LENGTH_SHORT).show()
-//                }
-//                viewAdapter.updateList(favoriteList)
-                viewModel.getLikedList()
-            }
-
+            R.id.btnLiked -> viewModel.getLikedList()
         }
 
         return super.onOptionsItemSelected(item)

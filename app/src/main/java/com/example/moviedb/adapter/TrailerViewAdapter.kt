@@ -41,13 +41,13 @@ class TrailerViewAdapter(private val activity : Activity) : RecyclerView.Adapter
 
         fun bind(item : TrailerResultDataModel, index : Int) {
             binding.trailerDataModel = item
-            if (item.id.isNullOrEmpty()) {
-                binding.imgPlay.visibility = View.GONE
-            }
-            else {
-                binding.tvNumbering.text = String.format(format, index)
-
-            }
+//            if (item.id.isNullOrEmpty()) {
+//                binding.imgPlay.visibility = View.GONE
+//            }
+//            else {
+//                binding.tvNumbering.text = String.format(format, index)
+//
+//            }
 
         }
     }
