@@ -20,6 +20,7 @@ import com.example.moviedb.data_models.MainResultsDataModel
 import com.example.moviedb.databinding.FragmentMainBinding
 import com.example.moviedb.view_models.MainPageViewModel
 import com.example.moviedb.view_models.ViewModelFactory
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dalvik.system.BaseDexClassLoader
 import java.lang.Exception
 
@@ -46,13 +47,15 @@ class MainFragment : Fragment() {
     ): View? {
 
         binding = DataBindingUtil.setContentView(activity as Activity, R.layout.fragment_main)
-
+        binding.btmNavView.apply {
+            setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        }
         initView()
-        setHasOptionsMenu(true)
         addObserver()
 
         return view
     }
+
 
 
     private fun initView() {
@@ -120,25 +123,22 @@ class MainFragment : Fragment() {
 
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        Log.d(TAG, "[onCreateOptionsMenu] >> IN")
-        inflater.inflate(R.menu.main_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-
-    override
-    fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG, "[onOptionsItemSelected] >> IN")
-
+    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.btnSortPopular -> viewModel.getPopularList()
-            R.id.btnSortVote -> viewModel.getTopRatedList()
-            R.id.btnLiked -> viewModel.getLikedList()
+            R.id.btnSortPopular -> {
+                viewModel.getPopularList()
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.btnSortVote -> {
+                viewModel.getTopRatedList()
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.btnLiked -> {
+                viewModel.getLikedList()
+                return@OnNavigationItemSelectedListener true
+            }
         }
-
-        return super.onOptionsItemSelected(item)
+        false
     }
 
 
