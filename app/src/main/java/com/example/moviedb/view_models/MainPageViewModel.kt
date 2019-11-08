@@ -21,6 +21,10 @@ class MainPageViewModel(context: Context) : ViewModel() {
 
     private var repository: MainResultRepository
     var favoriteList: LiveData<List<MainResultsDataModel>>
+
+    var popularList = MutableLiveData<List<MainResultsDataModel>>()
+    var topRatedList = MutableLiveData<List<MainResultsDataModel>>()
+
     var downloadedList = MutableLiveData<List<MainResultsDataModel>>()
     private val dbServices by lazy { MovieDBServicesInterface.create() }
 
@@ -30,12 +34,11 @@ class MainPageViewModel(context: Context) : ViewModel() {
 
         repository = MainResultRepository(mainResultDao)
         favoriteList = repository.getLikedList()
-
         getPopularList()
 
     }
 
-    private fun getData(option: String) {
+    private fun getData(option: String, sorted : String) {
         Log.d(TAG, "[getData] >> IN")
 //        activity.showProgressBar()
         dbServices.getList(option, BuildConfig.ApiKey)
@@ -45,9 +48,13 @@ class MainPageViewModel(context: Context) : ViewModel() {
             .subscribeBy(
                 onNext = {
                     Log.d(TAG, "[onNext >> ] " + it.results.size)
-                    if (downloadedList.value != it.results) {
-                        downloadedList.postValue(it.results)
+                    if (sorted == "top_rated") {
+                        topRatedList.postValue(it.results)
                     }
+                    else {
+                        popularList.postValue(it.results)
+                    }
+
                 },
                 onComplete = {
                     Log.d(TAG, "[onCompleted]")
@@ -63,15 +70,19 @@ class MainPageViewModel(context: Context) : ViewModel() {
 
 
     fun getTopRatedList() {
-        getData("top_rated")
+        getData("top_rated","top_rated")
     }
 
     fun getPopularList() {
-        getData("popular")
+        getData("popular", "popular")
     }
 
     fun getLikedList() {
         downloadedList.postValue(favoriteList.value)
+    }
+
+    fun postValue(list : List<MainResultsDataModel>) {
+        downloadedList.postValue(list)
     }
 
 

@@ -108,27 +108,27 @@ class MainFragment : Fragment() {
     private fun addObserver() {
 
         viewModel.favoriteList.observe(this, Observer {
-            if (it == null || it.isEmpty()) {
-                Toast.makeText(mContext, "List is empty", Toast.LENGTH_SHORT).show()
-            }
-
             if (binding.btmNavView.selectedItemId == R.id.btnLiked) {
                 viewAdapter.updateList(it)
+            }
+
+        })
+
+        viewModel.popularList.observe(this, Observer {
+            if (binding.btmNavView.selectedItemId == R.id.btnSortPopular) {
+                viewModel.postValue(it)
+            }
+
+        })
+
+        viewModel.topRatedList.observe(this, Observer {
+            if (binding.btmNavView.selectedItemId == R.id.btnSortVote) {
+                viewModel.postValue(it)
             }
         })
 
         viewModel.downloadedList.observe(this, Observer {
-            if (it != null) {
-                if (it.isEmpty()) {
-                    Toast.makeText(mContext, "List is empty", Toast.LENGTH_SHORT).show()
-                }
-                viewAdapter.updateList(it)
-            }
-            else {
-                Toast.makeText(mContext, "List is empty", Toast.LENGTH_SHORT).show()
-                viewAdapter.updateList(mutableListOf())
-            }
-
+            viewAdapter.updateList(it)
         })
 
 
