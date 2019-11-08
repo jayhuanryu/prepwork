@@ -47,11 +47,13 @@ class MainFragment : Fragment() {
     ): View? {
 
         binding = DataBindingUtil.setContentView(activity as Activity, R.layout.fragment_main)
-        binding.btmNavView.apply {
-            setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        }
         initView()
         addObserver()
+
+        binding.btmNavView.apply {
+            setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+            selectedItemId = R.id.btnSortPopular
+        }
 
         return view
     }
@@ -102,7 +104,10 @@ class MainFragment : Fragment() {
             if (it == null || it.isEmpty()) {
                 Toast.makeText(mContext, "List is empty", Toast.LENGTH_SHORT).show()
             }
-            viewAdapter.updateList(it)
+
+            if (binding.btmNavView.selectedItemId == R.id.btnLiked) {
+                viewAdapter.updateList(it)
+            }
         })
 
         viewModel.downloadedList.observe(this, Observer {
