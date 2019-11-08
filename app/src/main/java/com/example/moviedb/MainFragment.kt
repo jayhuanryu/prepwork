@@ -22,6 +22,7 @@ import com.example.moviedb.view_models.MainPageViewModel
 import com.example.moviedb.view_models.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dalvik.system.BaseDexClassLoader
+import kotlinx.android.synthetic.main.fragment_main.*
 import java.lang.Exception
 
 class MainFragment : Fragment() {
@@ -49,10 +50,16 @@ class MainFragment : Fragment() {
         binding = DataBindingUtil.setContentView(activity as Activity, R.layout.fragment_main)
         initView()
         addObserver()
-
-        binding.btmNavView.apply {
-            setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-            selectedItemId = R.id.btnSortPopular
+        if (savedInstanceState == null) {
+            binding.btmNavView.apply {
+                setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+                selectedItemId = R.id.btnSortPopular
+            }
+        } else {
+            binding.btmNavView.apply {
+                setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+                selectedItemId = savedInstanceState.getInt("selectedItem", R.id.btnSortPopular)!!
+            }
         }
 
         return view
@@ -86,7 +93,7 @@ class MainFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean("isRestoring", true)
+        outState.putInt("selectedItem", binding.btmNavView.selectedItemId)
         super.onSaveInstanceState(outState)
     }
 
