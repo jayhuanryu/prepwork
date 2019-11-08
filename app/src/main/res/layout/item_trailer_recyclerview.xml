@@ -40,7 +40,7 @@
             android:layout_marginLeft="20dp"
             android:text="@{trailerDataModel.name}"
             android:textColor="@color/colorBlack"
-            android:textSize="20sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/imgPlay"
             app:layout_constraintTop_toTopOf="parent" />

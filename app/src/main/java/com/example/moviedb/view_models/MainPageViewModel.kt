@@ -34,7 +34,9 @@ class MainPageViewModel(context: Context) : ViewModel() {
 
         repository = MainResultRepository(mainResultDao)
         favoriteList = repository.getLikedList()
-        getPopularList()
+        if (downloadedList.value.isNullOrEmpty()) {
+            getPopularList()
+        }
 
     }
 
@@ -82,7 +84,9 @@ class MainPageViewModel(context: Context) : ViewModel() {
     }
 
     fun postValue(list : List<MainResultsDataModel>) {
-        downloadedList.postValue(list)
+        if (list != downloadedList.value) {
+            downloadedList.postValue(list)
+        }
     }
 
 

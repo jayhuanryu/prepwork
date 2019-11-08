@@ -7,6 +7,7 @@ import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.CheckBox
+import android.widget.TextView
 import com.example.moviedb.data_models.MainResultsDataModel
 import com.example.moviedb.data_models.ReviewResultDataModel
 import com.example.moviedb.data_models.TrailerResultDataModel
@@ -44,6 +45,18 @@ class EventHandlers(val context: Context)  {
 
     fun onIsLikedClicked(viewModel : DetailPageViewModel) {
         viewModel.insert()
+    }
+
+
+    fun onClickReviewContent(view : View) : View {
+        if ((view as TextView).maxLines == 5) {
+            view.maxLines = Integer.MAX_VALUE
+        }
+        else {
+            view.maxLines = 5
+        }
+
+        return view
     }
 
 }
