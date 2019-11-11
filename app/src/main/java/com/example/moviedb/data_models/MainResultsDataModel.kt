@@ -98,6 +98,12 @@ class MainResultsDataModel(
         fun setRunTimeText(textView: TextView, runtime: Int) {
             textView.text = String.format("%d Mins", runtime)
         }
+
+        @JvmStatic
+        @BindingAdapter("app:setReleaseDate")
+        fun setReleaseDataText(textView: TextView, release_date: String?) {
+            textView.text = String.format("Release Date : %s", release_date)
+        }
     }
 
 

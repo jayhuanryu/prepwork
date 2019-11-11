@@ -17,7 +17,6 @@ class TrailerViewAdapter(private val activity : Activity) : RecyclerView.Adapter
     private val TAG = javaClass.simpleName
 
     private var trailerList : List<TrailerResultDataModel> = mutableListOf()
-    private val format by lazy { activity.getString(R.string.trailer_with_number) }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding : ItemTrailerRecyclerviewBinding =
@@ -30,7 +29,7 @@ class TrailerViewAdapter(private val activity : Activity) : RecyclerView.Adapter
 
     override fun getItemCount(): Int = trailerList.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(trailerList[position], position+1)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(trailerList[position])
 
     fun updateList(newList : List<TrailerResultDataModel>) {
         trailerList = newList
@@ -39,16 +38,8 @@ class TrailerViewAdapter(private val activity : Activity) : RecyclerView.Adapter
 
     inner class ViewHolder(private val binding : ItemTrailerRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item : TrailerResultDataModel, index : Int) {
+        fun bind(item : TrailerResultDataModel) {
             binding.trailerDataModel = item
-//            if (item.id.isNullOrEmpty()) {
-//                binding.imgPlay.visibility = View.GONE
-//            }
-//            else {
-//                binding.tvNumbering.text = String.format(format, index)
-//
-//            }
-
         }
     }
 
