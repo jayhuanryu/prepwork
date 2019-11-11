@@ -1,18 +1,10 @@
 package com.example.moviedb.view_models
 
-import android.app.Application
 import android.content.Context
-import android.util.Log
-import androidx.lifecycle.*
-import com.example.moviedb.BaseActivity
-import com.example.moviedb.BuildConfig
-import com.example.moviedb.Consts
-import com.example.moviedb.http_utils.MovieDBServicesInterface
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.moviedb.data_models.MainResultsDataModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.launch
 
 class MainPageViewModel(context: Context) : ViewModel() {
 
@@ -21,12 +13,7 @@ class MainPageViewModel(context: Context) : ViewModel() {
 
     private var repository: MainResultRepository
     var favoriteList: LiveData<List<MainResultsDataModel>>
-
-    var popularList = MutableLiveData<List<MainResultsDataModel>>()
-    var topRatedList = MutableLiveData<List<MainResultsDataModel>>()
-
     var downloadedList = MutableLiveData<List<MainResultsDataModel>>()
-    private val dbServices by lazy { MovieDBServicesInterface.create() }
 
 
     init {
@@ -34,49 +21,16 @@ class MainPageViewModel(context: Context) : ViewModel() {
 
         repository = MainResultRepository(mainResultDao)
         favoriteList = repository.getLikedList()
-        if (downloadedList.value.isNullOrEmpty()) {
-            getPopularList()
-        }
+        downloadedList = repository.downloadedList
 
     }
-
-    private fun getData(option: String, sorted : String) {
-        Log.d(TAG, "[getData] >> IN")
-//        activity.showProgressBar()
-        dbServices.getList(option, BuildConfig.ApiKey)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-
-            .subscribeBy(
-                onNext = {
-                    Log.d(TAG, "[onNext >> ] " + it.results.size)
-                    if (sorted == "top_rated") {
-                        topRatedList.postValue(it.results)
-                    }
-                    else {
-                        popularList.postValue(it.results)
-                    }
-
-                },
-                onComplete = {
-                    Log.d(TAG, "[onCompleted]")
-//                    activity.dismissProgressBar()
-                },
-                onError = {
-                    Log.e(TAG, it.message)
-                }
-            )
-    }
-
-
-
 
     fun getTopRatedList() {
-        getData("top_rated","top_rated")
+        repository.getTopRatedList()
     }
 
     fun getPopularList() {
-        getData("popular", "popular")
+        repository.getPopularList()
     }
 
     fun getLikedList() {

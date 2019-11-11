@@ -58,7 +58,7 @@ class MainFragment : Fragment() {
         } else {
             binding.btmNavView.apply {
                 setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-                selectedItemId = savedInstanceState.getInt("selectedItem", R.id.btnSortPopular)!!
+//                selectedItemId = savedInstanceState.getInt("selectedItem")!!
             }
         }
 
@@ -109,23 +109,23 @@ class MainFragment : Fragment() {
 
         viewModel.favoriteList.observe(this, Observer {
             if (binding.btmNavView.selectedItemId == R.id.btnLiked) {
-                viewAdapter.updateList(it)
-            }
-
-        })
-
-        viewModel.popularList.observe(this, Observer {
-            if (binding.btmNavView.selectedItemId == R.id.btnSortPopular) {
                 viewModel.postValue(it)
             }
 
         })
 
-        viewModel.topRatedList.observe(this, Observer {
-            if (binding.btmNavView.selectedItemId == R.id.btnSortVote) {
-                viewModel.postValue(it)
-            }
-        })
+//        viewModel.popularList.observe(this, Observer {
+//            if (binding.btmNavView.selectedItemId == R.id.btnSortPopular) {
+//                viewModel.postValue(it)
+//            }
+//
+//        })
+//
+//        viewModel.topRatedList.observe(this, Observer {
+//            if (binding.btmNavView.selectedItemId == R.id.btnSortVote) {
+//                viewModel.postValue(it)
+//            }
+//        })
 
         viewModel.downloadedList.observe(this, Observer {
             viewAdapter.updateList(it)
