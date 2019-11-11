@@ -10,17 +10,16 @@ import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviedb.adapter.MovieViewAdapter
 import com.example.moviedb.data_models.MainResultsDataModel
 import com.example.moviedb.databinding.FragmentMainBinding
 import com.example.moviedb.view_models.MainPageViewModel
 import com.example.moviedb.view_models.ViewModelFactory
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dalvik.system.BaseDexClassLoader
+import kotlinx.android.synthetic.main.fragment_main.*
 import java.lang.Exception
 
 class MainFragment : Fragment() {
@@ -34,9 +33,10 @@ class MainFragment : Fragment() {
     private lateinit var mContext: Context
 
     private val viewModel: MainPageViewModel by lazy {
-        ViewModelProviders.of(this@MainFragment, viewModelFactory)[MainPageViewModel::class.java]
+        activity.run {  ViewModelProviders.of(this@MainFragment, viewModelFactory)[MainPageViewModel::class.java] }
     }
-    private lateinit var viewModelFactory: ViewModelFactory
+//
+    private val viewModelFactory by lazy { ViewModelFactory(activity!!.applicationContext)}
 
 
     override fun onCreateView(
@@ -46,11 +46,20 @@ class MainFragment : Fragment() {
     ): View? {
 
         binding = DataBindingUtil.setContentView(activity as Activity, R.layout.fragment_main)
-
         initView()
-        setHasOptionsMenu(true)
         addObserver()
+        if (savedInstanceState == null) {
+            binding.btmNavView.apply {
+                setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+                selectedItemId = R.id.btnSortPopular
+            }
+        } else {
+            binding.btmNavView.apply {
+                setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+//                selectedItemId = savedInstanceState.getInt("selectedItem")!!
 
+            }
+        }
         return view
     }
 
@@ -65,10 +74,9 @@ class MainFragment : Fragment() {
         }
 
 
-
     }
 
-    private fun getOrientation() : Int{
+    private fun getOrientation(): Int {
         return if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
             2
         else
@@ -81,7 +89,8 @@ class MainFragment : Fragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean("isRestoring", true)
+        outState.putInt("selectedItem", binding.btmNavView.selectedItemId)
+
         super.onSaveInstanceState(outState)
     }
 
@@ -89,57 +98,42 @@ class MainFragment : Fragment() {
         super.onAttach(context)
         mContext = context
 
-
-        viewModelFactory = ViewModelFactory(mContext)
     }
 
     private fun addObserver() {
 
         viewModel.favoriteList.observe(this, Observer {
-            if (it == null || it.isEmpty()) {
-                Toast.makeText(mContext, "List is empty", Toast.LENGTH_SHORT).show()
+            if (binding.btmNavView.selectedItemId == R.id.btnLiked) {
+                viewModel.postValue(it)
             }
+
+        })
+
+        viewModel.presentingList.observe(this, Observer {
             viewAdapter.updateList(it)
         })
 
-        viewModel.downloadedList.observe(this, Observer {
-            if (it != null) {
-                if (it.isEmpty()) {
-                    Toast.makeText(mContext, "List is empty", Toast.LENGTH_SHORT).show()
+
+    }
+
+    private val mOnNavigationItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.btnSortPopular -> {
+                    viewModel.getPopularList()
+                    return@OnNavigationItemSelectedListener true
                 }
-                viewAdapter.updateList(it)
+                R.id.btnSortVote -> {
+                    viewModel.getTopRatedList()
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.btnLiked -> {
+                    viewModel.getLikedList()
+                    return@OnNavigationItemSelectedListener true
+                }
             }
-            else {
-                Toast.makeText(mContext, "List is empty", Toast.LENGTH_SHORT).show()
-                viewAdapter.updateList(mutableListOf())
-            }
-
-        })
-
-
-
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        Log.d(TAG, "[onCreateOptionsMenu] >> IN")
-        inflater.inflate(R.menu.main_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-
-    override
-    fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG, "[onOptionsItemSelected] >> IN")
-
-        when (item.itemId) {
-            R.id.btnSortPopular -> viewModel.getPopularList()
-            R.id.btnSortVote -> viewModel.getTopRatedList()
-            R.id.btnLiked -> viewModel.getLikedList()
+            false
         }
-
-        return super.onOptionsItemSelected(item)
-    }
 
 
 }

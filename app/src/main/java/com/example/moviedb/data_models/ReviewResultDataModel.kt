@@ -2,6 +2,8 @@ package com.example.moviedb.data_models
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.widget.TextView
+import androidx.databinding.BindingAdapter
 
 data class ReviewResultDataModel(
     val author : String?,
@@ -35,6 +37,12 @@ data class ReviewResultDataModel(
 
         override fun newArray(size: Int): Array<ReviewResultDataModel?> {
             return arrayOfNulls(size)
+        }
+
+        @JvmStatic
+        @BindingAdapter("app:setAuthor")
+        fun setAuthor(textView: TextView, author: String?) {
+            textView.text = String.format("Author : %s", author)
         }
     }
 }

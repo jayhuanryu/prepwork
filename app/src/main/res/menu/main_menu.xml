@@ -2,17 +2,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/btnSortPopular"
-        android:title="Sort By Popularity"
+        android:title="Popular"
+        android:icon="@drawable/selector_popular_item"
         app:showAsAction="collapseActionView" />
 
     <item
         android:id="@+id/btnSortVote"
-        android:title="Sort By Rated"
+        android:title="Top Rated"
+        android:icon="@drawable/selector_toprated_item"
         app:showAsAction="collapseActionView" />
 
     <item
         android:id="@+id/btnLiked"
-        android:title="Sort By Liked"
+        android:icon="@drawable/selector_favorite_checkbox"
+        android:title="Favorite"
         app:showAsAction="collapseActionView"/>
 
 

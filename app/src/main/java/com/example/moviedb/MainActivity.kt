@@ -12,9 +12,9 @@ import com.example.moviedb.view_models.ViewModelFactory
 
 
 class MainActivity : BaseActivity() {
-
-    private lateinit var viewModel: MainPageViewModel
-    private lateinit var viewModelFactory: ViewModelFactory
+//
+//    private lateinit var viewModel: MainPageViewModel
+//    private lateinit var viewModelFactory: ViewModelFactory
 
 
     private val mainFragment: MainFragment by lazy {
@@ -27,8 +27,8 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        viewModelFactory = ViewModelFactory(applicationContext)
-        viewModel = ViewModelProviders.of(this, viewModelFactory)[MainPageViewModel::class.java]
+//        viewModelFactory = ViewModelFactory(applicationContext)
+//        viewModel = ViewModelProviders.of(this, viewModelFactory)[MainPageViewModel::class.java]
 
         Log.d(TAG, "[onCreate] >> savedInstance + ${savedInstanceState?.getBoolean("isRestoring")}")
         if (supportFragmentManager.findFragmentById(R.id.flContent) != null) {

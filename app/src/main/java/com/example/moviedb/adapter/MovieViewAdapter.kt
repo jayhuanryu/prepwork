@@ -15,7 +15,7 @@ class MovieViewAdapter(private val activity: Activity) : RecyclerView.Adapter<Mo
 
     private val TAG: String = javaClass.simpleName
 
-    private var list: List<MainResultsDataModel> = mutableListOf()
+    var list: List<MainResultsDataModel> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
