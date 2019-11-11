@@ -56,7 +56,6 @@ class MainFragment : Fragment() {
         } else {
             binding.btmNavView.apply {
                 setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-//                selectedItemId = savedInstanceState.getInt("selectedItem")!!
 
             }
         }
@@ -92,6 +91,12 @@ class MainFragment : Fragment() {
         outState.putInt("selectedItem", binding.btmNavView.selectedItemId)
 
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        binding.btmNavView.selectedItemId = savedInstanceState?.getInt("selectedItem", R.id.btnSortPopular)!!
     }
 
     override fun onAttach(context: Context) {

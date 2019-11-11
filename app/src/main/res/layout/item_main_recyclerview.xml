@@ -22,7 +22,7 @@
             android:id="@+id/imgMovieImage"
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_height"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             app:layout_constraintTop_toTopOf="parent"
             app:setImageResource="@{movieResultModel.poster_path}"/>
