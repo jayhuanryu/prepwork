@@ -13,7 +13,7 @@ class MainPageViewModel(context: Context) : ViewModel() {
 
     private var repository: MainResultRepository
     var favoriteList: LiveData<List<MainResultsDataModel>>
-    var downloadedList = MutableLiveData<List<MainResultsDataModel>>()
+    var presentingList = MutableLiveData<List<MainResultsDataModel>>()
 
 
     init {
@@ -21,7 +21,7 @@ class MainPageViewModel(context: Context) : ViewModel() {
 
         repository = MainResultRepository(mainResultDao)
         favoriteList = repository.getLikedList()
-        downloadedList = repository.downloadedList
+        presentingList = repository.downloadedList
 
     }
 
@@ -34,12 +34,12 @@ class MainPageViewModel(context: Context) : ViewModel() {
     }
 
     fun getLikedList() {
-        downloadedList.postValue(favoriteList.value)
+        presentingList.postValue(favoriteList.value)
     }
 
     fun postValue(list : List<MainResultsDataModel>) {
-        if (list != downloadedList.value) {
-            downloadedList.postValue(list)
+        if (list != presentingList.value) {
+            presentingList.postValue(list)
         }
     }
 

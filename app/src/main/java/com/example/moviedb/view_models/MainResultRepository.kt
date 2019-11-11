@@ -17,16 +17,8 @@ class MainResultRepository (private val mainResultDao: MainResultDao) {
     private val TAG = javaClass.simpleName
 
 
-    init {
-        getPopularList()
-    }
-
     suspend fun insert(mainResultsDataModel: MainResultsDataModel) {
         mainResultDao.insert(mainResultsDataModel)
-    }
-
-    fun getAllList() : LiveData<List<MainResultsDataModel>> {
-        return mainResultDao.getAllList()
     }
 
     fun getLikedList() : LiveData<List<MainResultsDataModel>> {
@@ -47,19 +39,11 @@ class MainResultRepository (private val mainResultDao: MainResultDao) {
             .subscribeBy(
                 onNext = {
                     Log.d(TAG, "[onNext >> ] " + it.results.size)
-//                    if (downloadedList.value != it.results) {
-//                        if (sorted == "top_rated") {
-//                            topRatedList.postValue(it.results)
-//                        } else {
-//                            popularList.postValue(it.results)
-//                        }
-//                    }
                     downloadedList.postValue(it.results)
 
                 },
                 onComplete = {
                     Log.d(TAG, "[onCompleted]")
-//                    activity.dismissProgressBar()
                 },
                 onError = {
                     Log.e(TAG, it.message)

@@ -10,10 +10,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.moviedb.adapter.MovieViewAdapter
 import com.example.moviedb.data_models.MainResultsDataModel
@@ -36,9 +33,10 @@ class MainFragment : Fragment() {
     private lateinit var mContext: Context
 
     private val viewModel: MainPageViewModel by lazy {
-        ViewModelProviders.of(this@MainFragment, viewModelFactory)[MainPageViewModel::class.java]
+        activity.run {  ViewModelProviders.of(this@MainFragment, viewModelFactory)[MainPageViewModel::class.java] }
     }
-    private lateinit var viewModelFactory: ViewModelFactory
+//
+    private val viewModelFactory by lazy { ViewModelFactory(activity!!.applicationContext)}
 
 
     override fun onCreateView(
@@ -59,12 +57,11 @@ class MainFragment : Fragment() {
             binding.btmNavView.apply {
                 setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 //                selectedItemId = savedInstanceState.getInt("selectedItem")!!
+
             }
         }
-
         return view
     }
-
 
 
     private fun initView() {
@@ -77,10 +74,9 @@ class MainFragment : Fragment() {
         }
 
 
-
     }
 
-    private fun getOrientation() : Int{
+    private fun getOrientation(): Int {
         return if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
             2
         else
@@ -94,6 +90,7 @@ class MainFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt("selectedItem", binding.btmNavView.selectedItemId)
+
         super.onSaveInstanceState(outState)
     }
 
@@ -101,8 +98,6 @@ class MainFragment : Fragment() {
         super.onAttach(context)
         mContext = context
 
-
-        viewModelFactory = ViewModelFactory(mContext)
     }
 
     private fun addObserver() {
@@ -114,44 +109,31 @@ class MainFragment : Fragment() {
 
         })
 
-//        viewModel.popularList.observe(this, Observer {
-//            if (binding.btmNavView.selectedItemId == R.id.btnSortPopular) {
-//                viewModel.postValue(it)
-//            }
-//
-//        })
-//
-//        viewModel.topRatedList.observe(this, Observer {
-//            if (binding.btmNavView.selectedItemId == R.id.btnSortVote) {
-//                viewModel.postValue(it)
-//            }
-//        })
-
-        viewModel.downloadedList.observe(this, Observer {
+        viewModel.presentingList.observe(this, Observer {
             viewAdapter.updateList(it)
         })
 
 
-
     }
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.btnSortPopular -> {
-                viewModel.getPopularList()
-                return@OnNavigationItemSelectedListener true
+    private val mOnNavigationItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.btnSortPopular -> {
+                    viewModel.getPopularList()
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.btnSortVote -> {
+                    viewModel.getTopRatedList()
+                    return@OnNavigationItemSelectedListener true
+                }
+                R.id.btnLiked -> {
+                    viewModel.getLikedList()
+                    return@OnNavigationItemSelectedListener true
+                }
             }
-            R.id.btnSortVote -> {
-                viewModel.getTopRatedList()
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.btnLiked -> {
-                viewModel.getLikedList()
-                return@OnNavigationItemSelectedListener true
-            }
+            false
         }
-        false
-    }
 
 
 }
