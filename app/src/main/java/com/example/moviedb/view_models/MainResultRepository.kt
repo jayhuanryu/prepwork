@@ -1,6 +1,7 @@
 package com.example.moviedb.view_models
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.moviedb.BuildConfig
@@ -29,7 +30,7 @@ class MainResultRepository (private val mainResultDao: MainResultDao) {
         return mainResultDao.getItem(id)
     }
 
-    private fun getData(option: String, sorted : String) {
+    private fun getData(option: String) {
         Log.d(TAG, "[getData] >> IN")
 //        activity.showProgressBar()
         dbServices.getList(option, BuildConfig.ApiKey)
@@ -47,17 +48,18 @@ class MainResultRepository (private val mainResultDao: MainResultDao) {
                 },
                 onError = {
                     Log.e(TAG, it.message)
+                    downloadedList.postValue(mutableListOf())
                 }
             )
     }
 
 
     fun getTopRatedList() {
-        getData("top_rated","top_rated")
+        getData("top_rated")
     }
 
     fun getPopularList() {
-        getData("popular", "popular")
+        getData("popular")
     }
 
 

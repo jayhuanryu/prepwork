@@ -110,7 +110,11 @@ class MainFragment : Fragment() {
         })
 
         viewModel.presentingList.observe(this, Observer {
+            if (it.isNullOrEmpty()) {
+                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_SHORT).show()
+            }
             viewAdapter.updateList(it)
+
         })
 
 

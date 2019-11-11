@@ -2,6 +2,7 @@ package com.example.moviedb.view_models
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.*
 import com.example.moviedb.BuildConfig
 import com.example.moviedb.data_models.MainResultsDataModel
@@ -40,7 +41,6 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
     }
 
     fun getReviewData(movieId : Int) {
-//        activity.showProgressBar()
         dbServices.getReview(movieId, BuildConfig.ApiKey)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -66,7 +66,7 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
                 },
                 onError = {
                     Log.e(TAG, "[getReviewData] >> onError")
-//                    activity.dismissProgressBar()
+                    Toast.makeText(context, "Failed to retrieve data", Toast.LENGTH_LONG).show()
 //                    activity.showErrorPopup()
                 }
             )
@@ -85,7 +85,7 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
                     }
                     else {
                         Log.d(TAG, "[getTrailerData] >> onNext : result is empty")
-                        val temporaryTrailerItem = TrailerResultDataModel("","", "","","","",0, "")
+                        val temporaryTrailerItem = TrailerResultDataModel("","", "","","No Trailer Added","",0, "")
                         val temporaryTrailerList = ArrayList<TrailerResultDataModel>()
                         temporaryTrailerList.add(temporaryTrailerItem)
                         trailerList.value = temporaryTrailerList
@@ -99,7 +99,7 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
                 onError = {
                     Log.e(TAG, "[getTrailerData] >> onError")
 //                    activity.dismissProgressBar()
-//                    activity.showErrorPopup()
+                    Toast.makeText(context, "Failed to retrieve data", Toast.LENGTH_LONG).show()
                 }
             )
     }
@@ -115,7 +115,9 @@ class DetailPageViewModel(private val context: Context) : ViewModel() {
                     mainResultDataModel.postValue(item)
                 },
                 onComplete = {},
-                onError = {}
+                onError = {
+                    Toast.makeText(context, "Failed to retrieve data", Toast.LENGTH_LONG).show()
+                }
             )
     }
 
